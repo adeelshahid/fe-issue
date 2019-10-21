@@ -38,27 +38,7 @@ function fetchOptions(method = 'GET', body = {}) {
 class App extends React.Component {
     state = {
         edit: null,
-
-        list: [
-            {
-                id: 1,
-                title: 'Some issue',
-                description: 'Some issue description',
-                status: 'OPEN',
-            },
-            {
-                id: 2,
-                title: 'Another issue',
-                description: 'Some issue description',
-                status: 'PENDING',
-            },
-            {
-                id: 3,
-                title: 'Yet another issue',
-                description: 'Some issue description',
-                status: 'CLOSED',
-            },
-        ],
+        list: [],
     }
 
     async componentDidMount() {

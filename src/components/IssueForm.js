@@ -46,7 +46,7 @@ function defaultState(props = {}) {
 }
 
 export class IssueForm extends React.Component {
-    state = defaultState()
+    state = defaultState(this.props)
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.issue && this.props.issue.id !== prevState.id) {

@@ -72,10 +72,20 @@ const List = styled.div`
     display: flex;
     flex-direction: column;
 `
+const ListStatus = styled.div`
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 24px;
+`
 
 export function Issues({ list, onEdit, onDelete }) {
     return (
         <List>
+            <ListStatus>
+                You currently have {list.length}{' '}
+                {list.length === 1 ? 'Issue' : 'Issues'}
+            </ListStatus>
+
             {list.map(i => (
                 <Item
                     key={`issue-${i.id}`}

@@ -48,12 +48,10 @@ function defaultState(props = {}) {
 export class IssueForm extends React.Component {
     state = defaultState()
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.issue && nextProps.issue.id !== prevState.id) {
-            return defaultState(nextProps)
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.issue && this.props.issue.id !== prevState.id) {
+            this.setState(defaultState(this.props))
         }
-
-        return defaultState(nextProps)
     }
 
     onChangeTitle = (name, title) => this.setState({ title })

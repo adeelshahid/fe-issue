@@ -10,6 +10,31 @@ const Layout = styled.div`
     margin: 5vh auto 0 auto;
 `
 
+const SERVER_PATH = 'http://localhost:3001'
+
+function apiUrl(path) {
+    return `${SERVER_PATH}/${path}`
+}
+
+function fetchOptions(method = 'GET', body = {}) {
+    if (method === 'GET' || method === 'DELETE') {
+        return {
+            method,
+            mode: 'cors',
+        }
+    }
+
+    return {
+        method,
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        body: JSON.stringify(body),
+    }
+}
+
 class App extends React.Component {
     state = {
         edit: null,
@@ -42,7 +67,10 @@ class App extends React.Component {
 
     async fetch() {
         try {
-            // TODO fetch list of issues from server
+            const list = await fetch(apiUrl('issue'), fetchOptions()).then(
+                res => res.json(),
+            )
+            this.setState({ list })
         } catch (e) {
             console.error('fetch', e)
         }
@@ -50,18 +78,22 @@ class App extends React.Component {
 
     clearEdit = () => this.setState({ edit: null })
 
-    onSave = issue => {
-        this.clearEdit()
+    onSave = async issue => {
+        try {
+            if (issue.id > -1) {
+                const list = this.state.list.filter(i => i.id !== issue.id)
+                list.unshift(issue)
 
-        if (issue.id > -1) {
-            const list = this.state.list.filter(i => i.id !== issue.id)
-            list.unshift(issue)
+                this.setState({ list: list.slice(0) })
+                await fetch(apiUrl('issue'), fetchOptions('PUT', issue))
+                this.clearEdit()
+            } else {
+                await fetch(apiUrl('issue'), fetchOptions('POST', issue))
+            }
 
-            this.setState({ list: list.slice(0) })
-            // TODO UPDATE
-        } else {
-            // TODO CREATE
-            // TODO fetch updated list of issues from the server
+            await this.fetch()
+        } catch (e) {
+            console.log('onSave', e)
         }
     }
 
@@ -69,15 +101,19 @@ class App extends React.Component {
 
     onEditCancel = () => this.clearEdit()
 
-    onDelete = issue => {
-        // clear form, if issue being edited get's deleted
-        if (this.state.edit && this.state.edit.id === issue.id) {
-            this.clearEdit()
-        }
+    onDelete = async issue => {
+        try {
+            // Clear edit state, if issue being edited is deleted
+            if (this.state.edit && this.state.edit.id === issue.id) {
+                this.clearEdit()
+            }
 
-        const { list } = this.state
-        this.setState({ list: list.filter(i => i.id !== issue.id) })
-        // TODO DELETE
+            const { list } = this.state
+            this.setState({ list: list.filter(i => i.id !== issue.id) })
+            await fetch(apiUrl(`issue/${issue.id}`), fetchOptions('DELETE'))
+        } catch (e) {
+            console.log('onDelete', e)
+        }
     }
 
     render() {

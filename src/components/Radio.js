@@ -18,20 +18,18 @@ const Label = styled.label`
     user-select: none;
     font-size: 18px;
     text-transform: capitalize;
+    color: ${p => (p.disabled ? '#ccc' : '#000')};
 `
 
 export class Radio extends React.Component {
-    onChange = () => {
-        console.log('this.props.value', this.props.value)
-        this.props.onChange(this.props.name, this.props.value)
-    }
+    onChange = () => this.props.onChange(this.props.name, this.props.value)
 
     render() {
-        console.log(this.props.name, this.props.value)
         return (
             <Container>
-                <Label>
+                <Label disabled={this.props.disabled}>
                     <RadioElm
+                        disabled={this.props.disabled}
                         type="radio"
                         name={this.props.name}
                         value={this.props.value}

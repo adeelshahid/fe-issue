@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 const ButtonElm = styled.button`
     cursor: pointer;
     padding: 8px 20px;
+    margin-right: 10px;
     font-size: 20px;
     font-weight: bold;
     text-transform: uppercase;

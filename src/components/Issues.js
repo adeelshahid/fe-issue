@@ -83,7 +83,7 @@ export function Issues({ list, onEdit, onDelete }) {
         <List>
             <ListStatus>
                 You currently have {list.length}{' '}
-                {list.length === 1 ? 'Issue' : 'Issues'}
+                {list.length === 1 ? 'issue' : 'issues'}
             </ListStatus>
 
             {list.map(i => (
